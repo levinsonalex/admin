@@ -32,7 +32,7 @@ Once you've gotten your app working fine run `pip freeze > requirements.txt` to 
 
 ## Deploy
 
-To deploy this guy we need a WSGI server. You can run `gunicorn -b localhost:3000 -b localhost:3001 -w 4 app:app` this means the app will run with four workers, locally on two ports! You can drop the -w 4, its probably overkill for this class. If you are on your local machine, you can now visit the page by going to http://localhost:3000 or http://localhost:3000.
+To deploy this guy we need a WSGI server. You can run `gunicorn -b localhost:3000 -b localhost:3001 -w 4 app:app` this means the app will run with four workers, locally on two ports! You can drop the -w 4, its probably overkill for this class. If you are on your local machine, you can now visit the page by going to http://localhost:3000 or http://localhost:3001.
 
 If you wanted to run this on the machine assigned to you, you have to provide the hostname of your machine instead of localhost. You can find your hostname by running the command "hostname" on the terminal. For example:
 
