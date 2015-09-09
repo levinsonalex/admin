@@ -58,8 +58,7 @@ For programming assignment 1, we will be checking your two websites at the follo
 
 *Note: We accept multiple server-side languages and therefor setting up a webserver may differ across these implementations. 
 
-We will provide specific tutorial for the following shortly, but feel free to get started right away:  
-- Python
+We provide specific tutorial for [Python](https://github.com/EECS485-Fall2015/admin/blob/master/pa1/python/README.md)
 - We do not provide *official* support for other languages/frameworks. *You may decide to complete this and other projects with another language/framework only if you feel comfortable without staff support.*
 
 ## Part 3 (30 points): Schema creation and Loading Data
