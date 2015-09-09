@@ -1,5 +1,5 @@
 # Assignment 1: Hello, World Wide Web
-### Due: Sat. September 22, 2015
+### Due: Tue. September 22, 2015
 This assignment introduces you to the software and tools which provide the backend for the website 
 you will be building in this course.
 
