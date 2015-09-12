@@ -1,5 +1,5 @@
 # Assignment 1: Hello, World Wide Web
-### Due: Sat. September 22, 2015
+### Due: Tue. September 22, 2015
 This assignment introduces you to the software and tools which provide the backend for the website 
 you will be building in this course.
 
@@ -18,9 +18,9 @@ you will be building in this course.
 Changes to this spec will be announced on CTools and visible on [GitHub](https://github.com/EECS485-Fall2015/admin/blob/master/pa1/pa1.md).
 
 ## Part 1 (0 Points): Log in to Your Dev. Machine
-This is a group assignment. You should already have registered your GitHub username and joined a group via this 
-[link](http://eecs485fall15.herokuapp.com/). You will also receive an email with the 
-following information:
+This is a group assignment. You should register your GitHub username and joined a group via this 
+[link](http://eecs485fall15.herokuapp.com/) by Friday noon (Sep. 9). You will receive an email with the 
+following information after:
 
 * Two port numbers (e.g. `12345` and `54321`)
 * Your MySQL username
@@ -58,8 +58,7 @@ For programming assignment 1, we will be checking your two websites at the follo
 
 *Note: We accept multiple server-side languages and therefor setting up a webserver may differ across these implementations. 
 
-We will provide specific tutorial for the following shortly, but feel free to get started right away:  
-- Python
+We provide specific tutorial for [Python](https://github.com/EECS485-Fall2015/admin/blob/master/pa1/python/README.md)
 - We do not provide *official* support for other languages/frameworks. *You may decide to complete this and other projects with another language/framework only if you feel comfortable without staff support.*
 
 ## Part 3 (30 points): Schema creation and Loading Data
