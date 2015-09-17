@@ -68,6 +68,8 @@ username. For each person you should also maintain a password, a first name, a l
 and an email address. Each person may create/update/destroy as many albums that he or she 
 owns as he or she would like. Each album has a unique id, a title (two albums could have same title), a date created, a date last updated, and an owner's username. Each album may have zero or more photos. Within the context of a particular album, a photo has a sequence number and a caption (caption only lies in database for now, we will display it on website in pa2). For each photo, you will need to generate a hash as a unique picid. Each photo will also have a unique url. The same photo can be in two separate albums BUT there will be essentially two copies of this photo on the server. When users upload a photo, we upload it regardless of whether this photo is identical to a previously uploaded photo, and then we will keep both on the server. Although these photos look the same, actually their upload time is different so in some sense we see them as different photos, and thus these two photos will have different picids and urls. 
 
+For newly uploaded photos, you need to create a hash based on upload date and file name. Change the file name to this hash before saving it to server. As for provided photos, you could use file name as it is without using hash (since they all have different filename and won't conflict with new photos) OR you could create a hash based on file name or combine file name with create date and change file name to this hash(you could use python/bash script to change file name and generate batch sql script for data loading).
+
 An relational schema for the data you will need is as follows (primary key is bolded):
 
 * User ( **username**, firstname, lastname, password, email )
@@ -164,8 +166,7 @@ users - this is possible in nearly every server-side framework.
 
 #### Index: `/` = `http://{host}:{port}/{secret}/pa1/`
 The index should contain a proper &lt;title> tag, other &lt;meta> tags, a header and footer for 
-the page, some text describing the website and a list of users whose albums can be browsed. In 
-PA1, no login is needed for your website.
+the page, some text describing the website and a list of users whose albums can be browsed. The usernames should have links to browse their albums at `/albums?username=id`. In PA1, no login is needed for your website.
 
 #### View Album List: `/albums`
 In order to send information to a webserver, HTML provides forms which are be submitted via HTTP GET or POST requests. 
@@ -179,6 +180,8 @@ query parameter. Note that `GET` is the default when a user browses the web.  Re
 For example, if a user typed the URL with the query parameters (the query follows a url like: 
 http://{url}?name=value&name2=value2), any server-side scripting language can retrieve this information when 
 handling the request.
+
+A request to `GET /albums` without a username query parameter should return a 404 Error Page. The same should be done for invalid usernames passed in as query parameters.
 
 ### Part 4b (30 points): Editing Albums
 Now you have to create at least two webpages as described below. In editalbumlist and editalbum, you don’t need to 
@@ -218,7 +221,7 @@ reference only; you can have a fancier design):
 </table>
 
 As in `/albums`, different pages should be presented depending on the username query. 
-We do this in the same way as above (ex. `/albums/edit?username=id`).
+We do this in the same way as above (ex. `/albums/edit?username=id`). If no username parameter is provided, you should return a 404 Error Page.
 
 On the other hand, we use POST method to the same URL for *[Delete]* and *[Add]* buttons. To help us use the 
 autograder, please follow the interface defined below.
@@ -243,19 +246,19 @@ values entered by the user. Be sure to manage the `created` date for new albums.
 Clicking [Edit] button directs a user to `/album/edit?id=albumid`.
 
 #### Edit Album: `/album/edit`
-This page is provided with an `id` (ex. `/album/edit?id=2`) this key is the primary key of `album` table. This 
+This page is provided with an `id` (ex. `/album/edit?id=2`) this key is the primary key of `album` table. If no id parameter is provided, you should return a 404 Error Page. This 
 page should enable the user to perform the following operations:
 
 * Add pictures to the album. 
     - When adding a picture you must generate a unique hash for *each* picture, the `picid`.
-    - Determine the format of the image during the upload using the MIME type.
+    - Determine the format of the image during the upload using the file extension. Acceptable image formats include png, jpg, bmp, and gif. Anything not with those extensions should not be accepted by the server. 
     - Automatically set the `date` to the moment the picture was uploaded.
     - Pictures uploads should be kept in a `/pictures` folder.
     - Each picture in the folder will be saved as `/pictures/{picid}.{type}`, the picture's `url`.
     - You should automatically assign a sequence number to a picture, which is one larger than the largest sequence number in *the picture's album* currently.
 * Delete pictures from the album.
     - Be sure to remove the file in the `/pictures` folder as well as the database.
-* You need to manage the `lastupdated` date in the `album` using triggers, e.g. upload a new photo in an album, the `lastupdated` time in this album should change automatically.
+* You need to manage the `lastupdated` date in the `album` using triggers, e.g. upload a new photo in an album, the `lastupdated` time in this album should change automatically. This can be done using either SQL statements within your app or SQL triggers (you may find the latter easier).
 
 Similar to above you may `add` or `delete` pictures via HTTP `POST /album/edit` from an HTML from. To Add:
 
@@ -279,12 +282,12 @@ To Delete a photo:
 #### View Album: `/album`
 This page should display a thumbnail view of the pictures in the album ordered by the sequence 
 number. The `albumid` is given via query parameter named `id`. For example: `GET /album?id=2` Clicking on the 
-image should take you to `/pic?id=pictureid`.
+image should take you to `/pic?id=pictureid`. If no id parameter is provided, you should return a 404 Error Page.
 
 #### View Picture: `/pic`
 
 This page shows full sized picture. For example: `/pic?id=x83s7g5`. It must also have navigational elements to go to the 
-next and/or previous picture in the album, as well as a link back to the whole album page. 
+next and/or previous picture in the album, as well as a link back to the whole album page. If no id parameter is provided, you should return a 404 Error Page.
 
 # Deliverables
 Make sure that all these functions are present in your web application:
@@ -304,6 +307,22 @@ When your project is finished, you're expected to have a running website at the 
 done by examining your website through a web browser (both by human graders and an autograder). Since we interact directly
 with your websites, some modification of your database can occur - don't worry if extra users and pictures are present when
 we test your website - just make sure the given content is present. 
+
+For those using Flask: Your deployed code should not be using the Flask development server. This server is not suitable for production environments. Your code and Python packages should be contained within a virtualenv. After sourcing/activating your virtualenv, you can pip install [Gunicorn](http://gunicorn.org/), a WSGI-compliant HTTP server. 
+
+You should not be developing remotely on the servers provided. Instead, develop your code locally, test it locally with the Flask development server, your own MySQL installation, etc. After verifying correctness locally, do a Git pull from your Github repo on the server. Once your code is on the server and you have run the necessary SQL files, you can being your Flask app using Gunicorn as the server. To do so, run a command similar to this:
+```
+	 gunicorn -b eecs485-10.eecs.umich.edu:3000 -b eecs485-10.eecs.umich.edu:3001 -D app:app
+```
+This will start a background gunicorn server process that a Flask app instance called app (in a file called app.py) that is running on two ports (3000 and 3001). To verify, you can view a list of processes with the following command:
+```
+	ps aux | grep gunicorn
+```
+You should see a list of processes. If you ever need to kill/restart your processes, find the one initiated by your group and  its process id, then run the kill command:
+```
+	kill 12345 98765
+```
+where 12345 and 98765 are the process ids of your gunicorn server.
 
 #### Code
 Your server-side code will be graded by cloning at your GitHub repository. Be sure to use a `.gitignore` file to tell git to ignore any non-souce files (like `.pyc` files or `/venv`, etc) *and* the `/pictures` directory. Please do not put pictures anywhere in your git repo.
