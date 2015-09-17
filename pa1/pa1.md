@@ -175,7 +175,7 @@ HTTP GET requests do not make changes to the content that they are viewing. HTTP
 introduced.
 
 A request to `GET /albums?username=id` should show different web pages depending on the user specified by the `username` 
-query parameter. Note that `GET` is the default when a user browses the web.  Remember: since most browser requests are GET requests they SHOULD NOT affect the state of the information stored in your website.
+query parameter. Note that `GET` is the default when a user browses the web.  Remember: since most browser requests are GET requests they SHOULD NOT affect the state of the information stored in your website. For each album listed, it should have a link to view the album `GET /album?id=idhere` and edit the album `GET /album/edit?id=idhere` so that way users can quickly navigate to the albums and navigate to their edit page.
 
 For example, if a user typed the URL with the query parameters (the query follows a url like: 
 http://{url}?name=value&name2=value2), any server-side scripting language can retrieve this information when 
@@ -282,7 +282,7 @@ To Delete a photo:
 #### View Album: `/album`
 This page should display a thumbnail view of the pictures in the album ordered by the sequence 
 number. The `albumid` is given via query parameter named `id`. For example: `GET /album?id=2` Clicking on the 
-image should take you to `/pic?id=pictureid`. If no id parameter is provided, you should return a 404 Error Page.
+image should take you to `/pic?id=pictureid`. If no id parameter is provided, you should return a 404 Error Page. Each album page should also include a link to the edit view `/album/edit?id=id`.
 
 #### View Picture: `/pic`
 
