@@ -190,17 +190,14 @@ account and become authenticated. Refer to Part 3 "Authentication" and Part 4 "V
 for more details on successfully logging in users, and how to notify users when they incorrectly 
 attempt a login.
 
-### My Albums page:`/albums` [sensitive]
-This page is similar to its corresponding route in PA1, in that it contains links to albums which 
-the current User owns, as well as a link to the ‘/albums/edit’ route. Note that, 
-instead of using a URL parameter to input the username of the User’s albums that 
-we want to see, we are instead using the current session. You can navigate here 
-by clicking on the ‘My Albums’ button at the index page.
-
-### Public Albums of All Users:`/albums` [public]
-This page shows all of the public albums to a User who isn’t logged in. 
-Here, you find links to view the albums, but no links to edit them. 
-You can navigate here from the index page.
+### My Visible Albums page:`/albums` [sensitive/public]
+This page is similar to its corresponding route in PA1, in that in contains links to
+albums. It differs in that the user (logged in or not) is only shown links to albums that 
+he has access to (all public albums and, if logged in, all private albums he owns or has 
+been given access permission). Each album should also display visibility (i.e., whether the 
+album is public or private) next to its link. Note that the user doesn't have to be logged in to view public
+album links or pics. Because the user info is contained in the session, there is no
+longer any need to send username to albums as a URL argument.
 
 #### My Albums page:`/albums/edit` [sensitive]
 
@@ -223,17 +220,16 @@ from your PA1. Make sure to keep the Album.lastupdated field in the database
 updated when you change title, caption, or permission for an album, as well as
 all album updates from PA1.
 
-### My Albums page:`/albums` [sensitive]
-This page is similar to its corresponding route in PA1, in that it contains links to albums which 
-the current User owns, as well as a link to the ‘/albums/edit’ route. Note that, 
-instead of using a URL parameter to input the username of the User’s albums that 
-we want to see, we are instead using the current session. You can navigate here 
-by clicking on the ‘My Albums’ button at the index page.
+#### View Album page:`/album` [sensitive/public]
 
-### Public Albums of All Users:`/albums` [public]
-This page shows all of the public albums to a User who isn’t logged in. 
-Here, you find links to view the albums, but no links to edit them. 
-You can navigate here from the index page.
+This page displays the thumbnail view of an album just like the previous assignments. 
+The album title should be at the top, along with the album's owner. The
+photos should be displayed in sequence order, each with its date, and
+a caption. The page is the same as in the previous assignment, except
+that if the album is private, only the logged-in user has permission
+to view the album. This means the `/album` can be reached
+either from the logged-in user’s homepage or your albums page for
+non-logged in users (assuming correct permissions).
 
 #### View picture page:`/pic` [sensitive/public]
 
