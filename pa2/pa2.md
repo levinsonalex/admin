@@ -3,6 +3,8 @@
 
 For this PA, you will continue working on the photo album website developed in PA1. However, do not touch the files in the pa1 sub-directory. Make another sub-directory called pa2, and copy the files from pa1 into the pa2 sub-directory and work on the files there. **Modifying your pa1 folder after the project deadline is in violation of the honor code.** Also, it can hurt the grading process. By the end of this programming assignment you will learn how to authenticate users and maintain sessions. **Also, we are using new databases for this project, databases name: groupxxpa2.**
 
+ Finally, make sure to change your routes to '{secret-key}/**pa2**/'.
+
 ## Part 1: Getting started
 
 These sites contain useful tutorial and reference information for what you'll be implementing in this PA.
@@ -47,11 +49,14 @@ and only if there exists a tuple (a, u) in the *AlbumAccess* relation
 (see below).
 * A picture that does not belong to any public albums is accessible to a user if and only if it belongs to at least one private album that _u_ has permission to access to.*
 
-For example, User X creates albums A (public), B (private), and C (private). X grants User Y access to B. 
+For example, User X creates albums A (public), B (private), and C (private). X grants User Y access to B. Y creates album D.
 
-Y can view albums A and B in /albums. 
+Y can view albums A, B, and D on his logged-in index page. These are the albums Y has permission to see.
 
-Y can *not* view any of these albums (A, B, C) in /albums/edit.
+Y can *only* view album D on his logged-in '/albums' page, by clicking on the link to 'My Albums'. These are the albums Y has permission to *edit*
+
+X has permission to view the albums A, B, and C, both on his logged-in index page, and '/albums' page. He can edit these albums.
+
 
 
 ### Add public/private feature to the albums
@@ -155,7 +160,9 @@ You should also check that the two password fields match.  You should
 perform this test at both the client- and server-side.  For this test *only*
 you can use a small JavaScript function.
 
-Python is a server-side scripting languages which means it is executed by the web server when the user requests a document. JavaScript is mainly a client-side scripting language, normally embedded within HTML, and it will be executed on client. This will prevent an unnecessary round-trip if the user fills in two unmatching passwords. Why check server-side, then? To prevent any malicious code from sending an invalid password to the server. So, to summarize, you need to both check the password om the sever and on the client.
+Python is a server-side scripting languages which means it is executed by the web server when the user requests a document. JavaScript is mainly a client-side scripting language, normally embedded within HTML, and it will be executed on client. This will prevent an unnecessary round-trip if the user fills in two unmatching passwords. Why check server-side, then? Because if Javascript is turned off, we still need to be able to check if the two passwords match.
+
+If a User provides all valid information, create the User by inserting their information into your database. Please be sure to encrypt their password! 
 
 If a session already exists redirect the user to `/user/edit`.
 
@@ -190,14 +197,17 @@ account and become authenticated. Refer to Part 3 "Authentication" and Part 4 "V
 for more details on successfully logging in users, and how to notify users when they incorrectly 
 attempt a login.
 
-### My Visible Albums page:`/albums` [sensitive/public]
-This page is similar to its corresponding route in PA1, in that in contains links to
-albums. It differs in that the user (logged in or not) is only shown links to albums that 
-he has access to (all public albums and, if logged in, all private albums he owns or has 
-been given access permission). Each album should also display visibility (i.e., whether the 
-album is public or private) next to its link. Note that the user doesn't have to be logged in to view public
-album links or pics. Because the user info is contained in the session, there is no
-longer any need to send username to albums as a URL argument.
+### My Albums page:`/albums` [sensitive]
+This page is similar to its corresponding route in PA1, in that it contains links to albums which 
+the current User owns, as well as a link to the ‘/albums/edit’ route. Note that, 
+instead of using a URL parameter to input the username of the User’s albums that 
+we want to see, we are instead using the current session. You can navigate here 
+by clicking on the ‘My Albums’ button at the index page.
+
+### Public Albums of All Users:`/albums` [public]
+This page shows all of the public albums to a User who isn’t logged in. 
+Here, you find links to view the albums, but no links to edit them. 
+You can navigate here from the index page.
 
 #### My Albums page:`/albums/edit` [sensitive]
 
@@ -205,6 +215,8 @@ This is your `/albums/edit` page from PA1. It allows the user to
 add new albums, view existing albums, delete them or edit them.
 Remember that deleting an album should also involve deleting
 pictures in the album. *Note that you can only see those albums you created*
+
+Note that all new albums have private access by default.
 
 #### Edit Album page:`/album/edit` [sensitive]
 ￼￼￼
@@ -218,14 +230,14 @@ Users should be able to delete pictures from the album as well as add new pictur
 Users should also be able to click on individual images and be directed to `/pic` 
 from your PA1. Make sure to keep the Album.lastupdated field in the database
 updated when you change title, caption, or permission for an album, as well as
-all album updates from PA1.
+all album updates from PA1. This implies that pic captions are editable (as described in '/pic').
 
 #### View Album page:`/album` [sensitive/public]
 
 This page displays the thumbnail view of an album just like the previous assignments. 
 The album title should be at the top, along with the album's owner. The
 photos should be displayed in sequence order, each with its date, and
-a caption. The page is the same as in the previous assignment, except
+a caption (if caption exists for that photo). The page is the same as in the previous assignment, except
 that if the album is private, only the logged-in user has permission
 to view the album. This means the `/album` can be reached
 either from the logged-in user’s homepage or your albums page for
@@ -235,8 +247,9 @@ non-logged in users (assuming correct permissions).
 
 This page displays a picture just like the previous assignment. It should 
 have the caption, full-sized picture and links to previous and next picture.
-If the user does not have access to the album this picture is in, they should
-not be able to see the picture.
+You must be able to edit the caption. If you do, make sure to update the Album.lastupdated
+field for the album that pic is in. If the user does not have access to the album 
+this picture is in, they should not be able to see the picture.
 
 #### Logout page:`/logout` [sensitive]
 
@@ -277,15 +290,15 @@ You should enforce the following rules:
 * The password should be at least 5 and at most 15 characters long
 * The password must contain at least one digit and at least one letter
 * The password can only have letters, digits and underscores
+* E-mail address should be syntactially valid (i.e., it *could* be a valid email address, whether or not it is actually someone's working E-mail address)
+* Except for password, all fields (username, firstname, lastname, and e-mail address) have a max length of 20
 
 You can assume that the user is acting in good faith: your goal is to
 prevent users from adding bad usernames/passwords, not to guard
-against motivated attackers who want to sneak a [strange
-                                                 entry](http://en.wikipedia.org/wiki/Code_injection) into your password database. (which means you do not need
-to check things beyond above rules)
+against motivated attackers who want to sneak a [strange entry](http://en.wikipedia.org/wiki/Code_injection) into your password database. (which means you do not need to check things beyond above rules)
 
-As mentioned in above sections, server-side validation of matching passwords (the two passwords the user entered when signing up/editing their information) is necessary. In the event that the two passwords don't match on the server-side, redirect to the page that the information was entered on with a notification that the passwords didn't match.
-
+As mentioned in above sections, server-side validation of matching passwords (the two passwords the user entered when signing up/editing their information) is necessary. In the event that the two passwords don't match on the server-side, redirect to the page that the information was entered on with an error about User sign-up failing (it can be generic). Make sure to also do this same event (i.e., redirect
+    back here and display error) if the username already exists. 
 
 ## Grading
 
