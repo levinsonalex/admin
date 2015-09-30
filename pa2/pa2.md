@@ -190,17 +190,14 @@ account and become authenticated. Refer to Part 3 "Authentication" and Part 4 "V
 for more details on successfully logging in users, and how to notify users when they incorrectly 
 attempt a login.
 
-### My Albums page:`/albums` [sensitive]
-This page is similar to its corresponding route in PA1, in that it contains links to albums which 
-the current User owns, as well as a link to the ‘/albums/edit’ route. Note that, 
-instead of using a URL parameter to input the username of the User’s albums that 
-we want to see, we are instead using the current session. You can navigate here 
-by clicking on the ‘My Albums’ button at the index page.
-
-### Public Albums of All Users:`/albums` [public]
-This page shows all of the public albums to a User who isn’t logged in. 
-Here, you find links to view the albums, but no links to edit them. 
-You can navigate here from the index page.
+### My Visible Albums page:`/albums` [sensitive/public]
+This page is similar to its corresponding route in PA1, in that in contains links to
+albums. It differs in that the user (logged in or not) is only shown links to albums that 
+he has access to (all public albums and, if logged in, all private albums he owns or has 
+been given access permission). Each album should also display visibility (i.e., whether the 
+album is public or private) next to its link. Note that the user doesn't have to be logged in to view public
+album links or pics. Because the user info is contained in the session, there is no
+longer any need to send username to albums as a URL argument.
 
 #### My Albums page:`/albums/edit` [sensitive]
 
@@ -284,7 +281,7 @@ You should enforce the following rules:
 You can assume that the user is acting in good faith: your goal is to
 prevent users from adding bad usernames/passwords, not to guard
 against motivated attackers who want to sneak a [strange
-entry](http://en.wikipedia.org/wiki/Code_injection) into your password database. (which means you do not need
+                                                 entry](http://en.wikipedia.org/wiki/Code_injection) into your password database. (which means you do not need
 to check things beyond above rules)
 
 As mentioned in above sections, server-side validation of matching passwords (the two passwords the user entered when signing up/editing their information) is necessary. In the event that the two passwords don't match on the server-side, redirect to the page that the information was entered on with a notification that the passwords didn't match.
