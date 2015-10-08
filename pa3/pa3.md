@@ -432,6 +432,8 @@ How favorites are displayed is a group decision. It can be as simple as a simple
 
 Once again, security of these routes is not pivotal. It is not your responsibility in this project to guarantee that the routes are accessed by authenticated users. For example, it is okay that any person can send a POST request with a username (even if that user does not have access to view the picture). However, if a user goes to  `/pic?id=picid` page and does not have permission to view the page, they should not be allowed to view it. If it is a public page, the user should be able to view the favorites, but they themselves not favorite the picture since they are not logged in. The same permission checks hold true as in project 2. You should also reject requests with invalid information (such as picid and username).
 
+**Your Javascript code for favorites should live in a file called `/static/js/favorites.js`.**
+
 ## Part 3: Here Comes the Framework (optional 10% extra credit)
 
 *Please note that this part of the project is optional. Groups who complete this part will gain extensive knowledge with a client-side framework, and as a bonus, up to 10% extra credit on the project.*
@@ -821,7 +823,7 @@ As you can hopefully see, Ember provides a nice abstraction for many of the feat
 
 ## Deliverables
 Make sure that you have all of the following present to receive full credit:
-* Dynamic data binding for caption and favorites at the `/pic?id=picid` url
+* Dynamic data binding for caption and favorites at the `/pic?id=picid` url, with JS code located in the files `/static/js/caption.js` and `/static/js/favorites.js`, respectively.
 * API routes specified in part 2, including error handling
 * README.md with specification as to whether the extra credit was complete, your team's URLs and any other notes and how many late days have been used
 * Database loaded with given data (from projects 1 and 2), alongside the given SQL load data file for favorites and comments. Extra information should not be present in the database.
