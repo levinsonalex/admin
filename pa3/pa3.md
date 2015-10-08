@@ -263,7 +263,7 @@ function makeCaptionPostRequest(picid, caption, cb) {
     'caption': caption
   };
 
-  qwest.post('/lcahwk/pa3/pic/caption', data, {
+  qwest.post('/secretkey/pa3/pic/caption', data, {
     dataType: 'json',
     responseType: 'json'
   }).then(function(xhr, resp) {
@@ -515,7 +515,7 @@ Ember.Application.initializer({
 });
 
 App.Router = Ember.Router.extend({
-  rootURL: '/lcahwk/pa3/live'
+  rootURL: '/secretkey/pa3/live'
 });
 ```
 Here we create an Ember application and attach it to the window object with the name App. This means we can refer to it at any point by using "App". You can even type it into your web browser's developer Javascript console to modify it or inspect it. The next thing we do is run the initializer. Whenever the Ember app is created, it will run this function. What we have specified here will play a role in allowing username validation. We have created an Ember "service" and injected it within our other parts of the codebase (controllers and routes). We've also taken our main data store (see below) and made it available to the username-validator service so that it can query the data store. After creating the Ember app, we set a configuration option on its router called the rootURL, which let's Ember know what page is the root page for our Ember application. 
