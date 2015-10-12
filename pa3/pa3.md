@@ -43,7 +43,7 @@ In part 2, we will learn about HTML/JS data binding. Data binding involves bindi
 
 ### Part 2a: Data Binding Captions
 
-1. Modify our base.html template such that it loads our JS scripts that we will be executing. When your page is rendered, the web browser will first retrieve and execute all of the scripts in the head tags before rendering the body. Therefore, we will be loading all of our JS files in the head, and after they are loaded, executing them with function calls in our body (specifically in the "extrascripts" block). Your base.html should look similar to the following:
+1. Modify your base.html template such that it loads our JS scripts that we will be executing. When your page is rendered, the web browser will first retrieve and execute all of the scripts in the head tags before rendering the body. Therefore, we will be loading all of our JS files in the head, and after they are loaded, executing them with function calls in our body (specifically in the "extrascripts" block). Your base.html should look similar to the following:
 	```
 	<head>
 		<script type="text/javascript" src="/static/js/qwest.min.js"></script>
